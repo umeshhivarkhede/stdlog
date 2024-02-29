@@ -8,6 +8,26 @@ class Product_model extends CI_model {
     {
         parent::__construct();
     }
+
+    public function insert_info($data){
+
+        $query=$this->db->insert('user_info',$data);
+        if($query){
+            $id=$this->db->insert_id();
+            return $id;
+            //  $str = $this->db->last_query();
+        }
+
+    }
+
+    public function user_list(){
+       $this->db->select('*');
+       $this->db->from('user_info');
+       $query=$this->db->get();
+       
+       return $query->result_array();
+
+    }
     public function checkuser($data){
         $username=$data['username'];
         $password=$data['password'];

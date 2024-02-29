@@ -15,6 +15,8 @@ class Products extends CI_Controller {
       $this->load->helper('form');
       $this->load->library('session');
       $this->load->helper('email');
+      $this->load->library('upload');
+
 
 
     }
@@ -58,14 +60,90 @@ class Products extends CI_Controller {
 
  }
   public function add_course(){
-    
+     
     $this->load->view('add-course');
 
   }
-   
+  public function add_info(){
+     
+    $this->load->view('add-info');
+
+  }
+  public function insert_info(){
+    
+
+     $this->form_validation->set_rules('name', 'Student Name' ,'trim|required|xss_clean');
+     $this->form_validation->set_rules('email','Student Email','trim|required|valid_email');
+     $this->form_validation->set_rules('course','Course','trim|required');
+     $this->form_validation->set_rules('gender','Gender','trim|required');
+     $this->form_validation->set_rules('coupon_type','Select Coupon','trim|required');
+     
+     if(empty($_FILES['profile_pic']['name'])){
+      $this->form_validation->set_rules('profile_pic','Image/Document','trim|required');
+     }
+     if ($this->form_validation->run() == FALSE)
+                {
+                  
+                     $this->load->view('add-info');
+
+                }else{
+                  $name=$this->input->post('name');
+                  $email=$this->input->post('email');
+                  $course=$this->input->post('course');
+                  $gender=$this->input->post('gender');
+                  $coupon_type=$this->input->post('coupon_type');
+                 
+                  $data_array=array(
+                        'name'=> $name,
+                        'email'=>$email,
+                        'gender'=>$gender,
+                        'course'=>$course,
+                        'status'=>$coupon_type,
+
+                  );
+                  $result=$this->Product_model->insert_info($data_array);
+                   if($result){
+                     
+                    echo $result;
+                   }
+                }
+  }
+
+
+  public function user_list(){
+
+    $data['user_list']=$this->Product_model->user_list();
+    $this->load->view('view_users',$data);
+    
+
+  }
   public function insert_course(){
     $course_name=$this->input->post('course');
-   
+
+  
+   $config = array(
+				'file_name'=>time(),
+				'overwrite'=>TRUE,
+				'max_width'=>'10280',
+				'max_height'=>'8000',
+				'max_size'=>'24000000',
+				'allowed_types' => "gif|jpg|png|jpeg",
+				'upload_path'=>'public/Images' 
+			); 
+			$this->upload->initialize($config); 
+
+      if($this->upload->do_upload('profile_pic')){
+        $imageData = $this->upload->data();
+        // $data['editInfo']->profile_pic;
+       $fileName = $imageData['file_name'];
+       $record['profile_pic'] = $fileName; 
+      //  unlink($_SERVER['DOCUMENT_ROOT'].'/CI3/public/Images/'.$data['editInfo']->profile_pic);
+       
+     }  else{
+       echo $this->upload->display_errors();
+     }    
+
+     exit();
      $course_data=array(
       'course_name'=>$course_name
      );
@@ -135,6 +213,7 @@ $this->load->view('view-subject',$data);
 
 public function edit_subject($id){
 
+  echo $this->uri->segment(3);
   $data['subject_data']=$this->Product_model->get_subject($id);
 
   $this->load->view('edit-subject',$data);

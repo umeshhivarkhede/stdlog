@@ -60,6 +60,8 @@ $route['update_subject/(:any)'] = 'Products/update_subject/$1';
 $route['add-course'] = 'Products/add_course';
 $route['insert-course'] = 'Products/insert_course';
 $route['login'] = 'Products/login';
-
+$route['add-info'] = 'Products/add_info';
+$route['insert_info'] = 'Products/insert_info';
+$route['user-list'] = 'Products/user_list';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = TRUE;

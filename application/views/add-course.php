@@ -9,18 +9,25 @@
 </head>
 <body>
   <?php 
-  $username = ($this->session->userdata['logged_in']['username']);
+ // $username = ($this->session->userdata['logged_in']['username']);
 
   ?>
-  <h1>Welcome <?php echo  $username  ?></h1>
+  <h1>Welcome <?php //echo  $username  ?></h1>
     <div class="container  mt-3">
-    <form action="<?php echo base_url()?>insert-course" method="post" >
+    <form action="<?php echo base_url()?>insert-course" method="post"  enctype="multipart/form-data" >
     <div class="row">
          
             <div class="col-lg-6 mt-3">
             <input class="form-control" name="course" value="" placeholder="Enter Course name">
             </div>
-             
+              
+				 <div class="form-group row">
+ 					<div class="col-sm-1"> </div>
+ 					<label class="col-sm-3" for="name"> Profile Pic </label>
+ 					<div class="col-sm-4">
+ 						<input type="file" class="form-control"  name="profile_pic" id="profile_pic" >
+ 					</div> 
+ 				</div>
                 <div class="col-lg-6 mt-3">
                 <input class="btn btn-info" type="submit" name="submit">
        </div>
